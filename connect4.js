@@ -34,6 +34,8 @@ const makeHtmlBoard = () => {
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
+  // top.addEventListener("mouseover", displayPiece);
+  // top.addEventListener("mouseout", clearPiece);
 
   for (let x = 0; x < WIDTH; x++) {
     let headCell = document.createElement("td");
@@ -54,6 +56,26 @@ const makeHtmlBoard = () => {
   }
 }
 
+// let mousedOver = false
+// const displayPiece = (evt) => {
+//   console.log("In display peice!");
+//   if(!mousedOver){
+//     mousedOver = true;
+//     let headTd = evt.target;
+//     let gamePiece = document.createElement('div');
+//     gamePiece.classList.add("piece", `${currPlayer}`)
+//     headTd.append(gamePiece);
+//   }
+// }
+
+// const clearPiece = evt => {
+//   console.log("In clear piece!");
+//   evt.target.firstElementChild.remove();
+//   mousedOver = false;
+// }
+
+
+
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 const findSpotForCol = x => {
@@ -70,7 +92,7 @@ const findSpotForCol = x => {
 const placeInTable = (y, x, player) => {
   // make a div and insert into correct table cell
   let gamePiece = document.createElement('div');
-  gamePiece.classList.add("piece", `${player}`)
+  gamePiece.classList.add("piece", `${player}`, `row-${y}`, 'placed')
   //find the target td with the proper id coordinates
   let targetTd = document.getElementById(`${y}-${x}`);
   targetTd.append(gamePiece);
