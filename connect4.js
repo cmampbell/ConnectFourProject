@@ -68,11 +68,13 @@ const findSpotForCol = x => {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 const placeInTable = (y, x, player) => {
-  // TODO: make a div and insert into correct table cell
+  // make a div and insert into correct table cell
   let gamePiece = document.createElement('div');
   gamePiece.classList.add("piece", `${player}`)
+  //find the target td with the proper id coordinates
   let targetTd = document.getElementById(`${y}-${x}`);
   targetTd.append(gamePiece);
+  //update JS board array with player info
   board[y][x] = player;
 }
 
@@ -86,8 +88,6 @@ const endGame = msg => alert(msg);
 const handleClick = evt => {
   // get x from ID of clicked cell
   const x = +evt.target.id;
-  //check which players turn it is
-  currPlayer === 'one' ? currPlayer = 'two' : currPlayer = 'one';
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
   if (y === null) {
@@ -95,7 +95,6 @@ const handleClick = evt => {
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
   placeInTable(y, x, currPlayer);
 
   // check for win
@@ -103,11 +102,12 @@ const handleClick = evt => {
     return endGame(`Player ${currPlayer} won!`);
   }
 
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  // check if all cells in board are filled; if so call, call endGame with tie message
   if (board.every(subArr => subArr.every(val => val))) {
     endGame('It\'s a tie!');
   }
+    //swap players turn it is
+    currPlayer === 'one' ? currPlayer = 'two' : currPlayer = 'one';
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */

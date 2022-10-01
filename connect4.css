@@ -16,7 +16,7 @@
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
-.one {
+div .one {
   background-color: red;
 }
 
