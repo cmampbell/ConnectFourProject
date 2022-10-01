@@ -9,7 +9,7 @@ const WIDTH = 7;
 const HEIGHT = 6;
 
 let currPlayer = 'one'; // active player: 'one' or 'two'. changed to strings because css selectors didn't like using numbers
-const board = []; // array of rows, each row is array of cells  (board[y][x])
+let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -25,21 +25,22 @@ const makeBoard = () => {
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
+// get "htmlBoard" variable from the item in HTML w/ID of "board"
+// moved to global scope for reset button
+
 
 const makeHtmlBoard = () => {
-  // get "htmlBoard" variable from the item in HTML w/ID of "board"
   const htmlBoard = document.querySelector('#board');
 
   // create top placement row, players click table cells in the row to place pieces
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
-  // top.addEventListener("mouseover", displayPiece);
-  // top.addEventListener("mouseout", clearPiece);
 
   for (let x = 0; x < WIDTH; x++) {
     let headCell = document.createElement("td");
     headCell.setAttribute("id", x);
+    headCell.addEventListener("mouseenter", displayPiece);
     top.append(headCell);
   }
   htmlBoard.append(top);
@@ -56,23 +57,17 @@ const makeHtmlBoard = () => {
   }
 }
 
-// let mousedOver = false
-// const displayPiece = (evt) => {
-//   console.log("In display peice!");
-//   if(!mousedOver){
-//     mousedOver = true;
-//     let headTd = evt.target;
-//     let gamePiece = document.createElement('div');
-//     gamePiece.classList.add("piece", `${currPlayer}`)
-//     headTd.append(gamePiece);
-//   }
-// }
+const displayPiece = (evt) => {
+  let tempGamePiece = document.createElement('div');
+  tempGamePiece.classList.add("piece", `${currPlayer}`)
+  evt.target.append(tempGamePiece);
+  tempGamePiece.parentElement.addEventListener("mouseleave", clearPiece);
+}
 
-// const clearPiece = evt => {
-//   console.log("In clear piece!");
-//   evt.target.firstElementChild.remove();
-//   mousedOver = false;
-// }
+const clearPiece = evt => {
+  let currentGamePiece = evt.target;
+  currentGamePiece.lastElementChild.remove();
+}
 
 
 
@@ -109,7 +104,18 @@ const endGame = msg => alert(msg);
 // let currPLayer = 'one';
 const handleClick = evt => {
   // get x from ID of clicked cell
-  const x = +evt.target.id;
+  let x; 
+
+  //if we click on the temp div we need to get the parent id
+  if(evt.target.tagName === 'DIV'){ 
+    x = +evt.target.parentElement.id;
+    evt.target.remove();
+  } 
+  //if don't click on the div but click in the table cell
+  else if (evt.target.tagName === 'TD') { 
+    x = +evt.target.id;
+  }
+
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
   if (y === null) {
@@ -168,3 +174,16 @@ const checkForWin = () => {
 
 makeBoard();
 makeHtmlBoard();
+
+//added reset button to play again
+const resetButton = document.querySelector('#reset');
+
+const resetGame = evt => {
+  console.log('Reset button clicked');
+  document.querySelector('#board').innerHTML = '';
+  board = [];
+  makeBoard();
+  makeHtmlBoard();
+}
+
+resetButton.addEventListener("click", resetGame);
