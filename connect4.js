@@ -96,8 +96,15 @@ const placeInTable = (y, x, player) => {
 }
 
 /** endGame: announce game end */
+//added reset button to play again
+const resetButton = document.querySelector('#reset');
 
-const endGame = msg => alert(msg);
+const endGame = msg => {
+  let endMsg = document.createElement('h2');
+  endMsg.innerText = msg;
+  resetButton.before(endMsg);
+  resetButton.style.display = 'block';
+}
 
 /** handleClick: handle click of column top to play piece */
 
@@ -175,11 +182,11 @@ const checkForWin = () => {
 makeBoard();
 makeHtmlBoard();
 
-//added reset button to play again
-const resetButton = document.querySelector('#reset');
+
 
 const resetGame = evt => {
   console.log('Reset button clicked');
+  resetButton.style.display = 'hidden';
   document.querySelector('#board').innerHTML = '';
   board = [];
   makeBoard();

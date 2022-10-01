@@ -9,6 +9,33 @@ body {
 h1 {
   text-align: center;
   font-size: 30px;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  color: white;
+}
+
+h2 {
+  text-align: center;
+  font-size: 30px;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: white;
+  margin-top: 15%;
+}
+
+input {
+  font-family: 'Roboto', sans-serif;
+  background-color: blanchedalmond;
+  border: none;
+  margin-top: 5%;
+  width: 80%;
+  height: 40px;
+  transform: translate(10%, 0%);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  display: none;
 }
 
 /* game board table */
@@ -49,7 +76,7 @@ div .two {
 /* column-top is table row of clickable areas for each column */
 
 #column-top td {
-  border: dashed 0px lightgray;
+  border: solid 0px lightgray;
   border-radius: 0;
   padding: 5px;
   background-color: rgb(44, 168, 218);
