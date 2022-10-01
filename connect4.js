@@ -8,15 +8,14 @@
 const WIDTH = 7;
 const HEIGHT = 6;
 
-let currPlayer = 1; // active player: 1 or 2
+let currPlayer = 'one'; // active player: 'one' or 'two'. changed to strings because css selectors didn't like using numbers
 const board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
-function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+const makeBoard = () => {
   for (let y = 0; y < HEIGHT; y++) {
     board.push([]);
     for (let x = 0; x < WIDTH; x++) {
@@ -27,8 +26,8 @@ function makeBoard() {
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
-function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+const makeHtmlBoard = () => {
+  // get "htmlBoard" variable from the item in HTML w/ID of "board"
   const htmlBoard = document.querySelector('#board');
 
   // create top placement row, players click table cells in the row to place pieces
@@ -57,11 +56,10 @@ function makeHtmlBoard() {
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
-function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
-  for (let y = board.length - 1; y > -1; y--){
-    if(!board[y][x]){
-      return y
+const findSpotForCol = x => {
+  for (let y = board.length - 1; y > -1; y--) { //loop through board array, starting at the last index of board
+    if (!board[y][x]) { // if the current element in the array is null
+      return y //return y value
     }
   }
   return null;
@@ -69,10 +67,10 @@ function findSpotForCol(x) {
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
-function placeInTable(y, x, player) {
+const placeInTable = (y, x, player) => {
   // TODO: make a div and insert into correct table cell
   let gamePiece = document.createElement('div');
-  gamePiece.classList.add("piece", `${player}`) 
+  gamePiece.classList.add("piece", `${player}`)
   let targetTd = document.getElementById(`${y}-${x}`);
   targetTd.append(gamePiece);
   board[y][x] = player;
@@ -80,15 +78,12 @@ function placeInTable(y, x, player) {
 
 /** endGame: announce game end */
 
-function endGame(msg) {
-  // TODO: pop up alert message
-  alert(msg);
-}
+const endGame = msg => alert(msg);
 
 /** handleClick: handle click of column top to play piece */
 
-let currPLayer = 'one';
-function handleClick(evt) {
+// let currPLayer = 'one';
+const handleClick = evt => {
   // get x from ID of clicked cell
   const x = +evt.target.id;
   //check which players turn it is
@@ -110,39 +105,39 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-  if(board.every(subArr => subArr.every(val => val))){
+  if (board.every(subArr => subArr.every(val => val))) {
     endGame('It\'s a tie!');
   }
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
-function checkForWin() {
-  function _win(cells) {
+const checkForWin = () => {
+  const _win = cells =>
     // Check four cells to see if they're all color of current player
     //  - cells: list of four (y, x) cells
     //  - returns true if all are legal coordinates & all match currPlayer
-
-    return cells.every(
-      ([y, x]) =>
-        y >= 0 &&
-        y < HEIGHT &&
+    cells.every(
+      ([y, x]) => //destructuring on each subarray in cells, 
+        y >= 0 &&     //y will become first value in the current subarray every is evaluating, x will become the second
+        y < HEIGHT && // we are checking that y and x are valid numbers 
         x >= 0 &&
         x < WIDTH &&
+        //check if the current cell contains the same string as the value of the current player on the JS board array
         board[y][x] === currPlayer
     );
-  }
 
   // TODO: read and understand this code. Add comments to help you.
 
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+  for (let y = 0; y < HEIGHT; y++) { // loop through subArrays in board
+    for (let x = 0; x < WIDTH; x++) { // start at beginning of subArray
+      // create arrays of values that will check adjacent boxes in 4 directions
+      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]]; //will create an array with index values for _win() 
       const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
       const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) { // if any one of the _win functions return true, check for win returns true
         return true;
       }
     }
